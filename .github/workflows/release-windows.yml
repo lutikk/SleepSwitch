@@ -44,7 +44,7 @@ jobs:
       - name: Package Windows .exe
         shell: cmd
         run: |
-          fyne package -os windows -name SleepSwitch -appID com.luciferdennica.sleepswitch -icon assets\icon.png -src .\cmd\sleepswitch -release
+е          fyne package --os windows --name SleepSwitch --app-id com.luciferdennica.sleepswitch --icon assets\icon.png --src .\cmd\sleepswitch --release
           if not exist build mkdir build
           move /Y SleepSwitch.exe build\SleepSwitch.exe
 
