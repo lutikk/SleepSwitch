@@ -13,7 +13,9 @@ SleepSwitch is a one-button GUI on top of the macOS `pmset` `disablesleep` setti
 - **Prevent Sleep** runs `pmset -a disablesleep 1` — your Mac stays awake even with the lid closed.
 - **Allow Sleep** runs `pmset -a disablesleep 0` — your Mac goes back to its normal sleep schedule.
 
-macOS asks for an administrator password only when the setting is changed.
+By default macOS asks for an administrator password on every toggle. Click **Set Up Passwordless** once — SleepSwitch writes a NOPASSWD rule into `/etc/sudoers.d/sleepswitch` (validated via `visudo`), and every subsequent toggle is instant, no password. You can revert from the same button at any time.
+
+SleepSwitch also checks GitHub Releases at startup and via the **Check for Updates** button. If a newer version is available, it downloads the DMG, replaces itself, and relaunches — no manual reinstall.
 
 ### Who It's For
 
@@ -32,10 +34,11 @@ In short: anyone who has ever cursed at a Mac for sleeping at the worst possible
 
 ### Install
 
-1. Download `SleepSwitch-1.0.0.dmg` from the [Releases](https://github.com/lutikk/SleepSwitch/releases) page (universal binary — runs on Apple Silicon and Intel).
+1. Download the latest `SleepSwitch-X.Y.Z.dmg` from the [Releases](https://github.com/lutikk/SleepSwitch/releases) page (universal binary — runs on Apple Silicon and Intel).
 2. Open the DMG and drag **SleepSwitch** to the **Applications** folder.
 3. First launch: right-click `SleepSwitch.app` in `/Applications` → **Open** (Gatekeeper warning, since the app is not Apple-signed).
 4. Click the toggle. Enter your admin password when macOS asks.
+5. Optional: click **Set Up Passwordless** to skip the password prompt on every future toggle.
 
 ### Build From Source
 
@@ -71,7 +74,9 @@ SleepSwitch — это однокнопочный GUI над командой `p
 - **Запретить сон** — выполняет `pmset -a disablesleep 1`. Mac не засыпает даже с закрытой крышкой.
 - **Разрешить сон** — выполняет `pmset -a disablesleep 0`. Возвращает обычный режим сна.
 
-macOS запрашивает пароль администратора только при смене состояния.
+По умолчанию macOS спрашивает пароль администратора на каждое переключение. Кнопка **Настроить без пароля** один раз записывает правило в `/etc/sudoers.d/sleepswitch` (с валидацией через `visudo`), после чего любое переключение работает мгновенно, без пароля. Откатить можно той же кнопкой в любой момент.
+
+SleepSwitch также сам проверяет GitHub Releases при старте и по кнопке **Проверить обновления**. Если есть новая версия — скачивает DMG, заменяет себя на свежий бандл и перезапускается. Никакой ручной переустановки.
 
 ### Кому Подойдёт
 
@@ -90,10 +95,11 @@ SleepSwitch — для всех, кому нужно, чтобы Mac продо�
 
 ### Установка
 
-1. Скачай `SleepSwitch-1.0.0.dmg` со страницы [Releases](https://github.com/lutikk/SleepSwitch/releases) (universal binary — работает и на Apple Silicon, и на Intel).
+1. Скачай свежий `SleepSwitch-X.Y.Z.dmg` со страницы [Releases](https://github.com/lutikk/SleepSwitch/releases) (universal binary — работает и на Apple Silicon, и на Intel).
 2. Открой DMG и перетащи **SleepSwitch** в папку **Applications**.
 3. Первый запуск: правый клик по `SleepSwitch.app` в `/Applications` → **Открыть** (Gatekeeper ругается, потому что приложение не подписано Apple).
 4. Нажми кнопку. Введи пароль администратора, когда macOS попросит.
+5. По желанию: нажми **Настроить без пароля**, чтобы дальше переключать сон без диалога пароля.
 
 ### Сборка Из Исходников
 
