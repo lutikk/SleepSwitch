@@ -46,7 +46,7 @@ Requires Go 1.22+ and the Fyne toolchain (uses Cgo + system OpenGL on macOS).
 
 ```bash
 go install fyne.io/tools/cmd/fyne@latest
-fyne package -os darwin -name SleepSwitch --appID com.luciferdennica.sleepswitch -src ./cmd/sleepswitch
+fyne package -os darwin -name SleepSwitch --appID com.luciferdennica.sleepswitch -icon assets/icon.png -src ./cmd/sleepswitch
 ```
 
 For a universal binary (Apple Silicon + Intel):
@@ -56,6 +56,27 @@ CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 CC="clang -arch arm64"   go build -o buil
 CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 CC="clang -arch x86_64"  go build -o build/ss-amd64 ./cmd/sleepswitch
 lipo -create -output build/SleepSwitch.app/Contents/MacOS/sleepswitch build/ss-arm64 build/ss-amd64
 ```
+
+### Windows
+
+On Windows SleepSwitch lives in the system tray. Right-click the icon to **Prevent Sleep** / **Allow Sleep**, or open the status window. The toggle calls `powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION` for both AC and DC — equivalent to changing **Control Panel → Power Options → Choose what closing the lid does**. Windows will ask for elevation (UAC) on every toggle in this release; a Task Scheduler-based passwordless mode is planned.
+
+Build on Windows:
+
+```cmd
+go install fyne.io/tools/cmd/fyne@latest
+fyne package -os windows -name SleepSwitch -appID com.luciferdennica.sleepswitch ^
+  -icon assets\icon.png -src .\cmd\sleepswitch -release
+move SleepSwitch.exe build\
+```
+
+Then compile the installer with Inno Setup 6:
+
+```cmd
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SleepSwitch.iss
+```
+
+The resulting `SleepSwitch-1.0.2-Setup.exe` lands in `build\` and offers a Welcome → License → Folder → Tasks (desktop shortcut, launch on login) → Install → Finish wizard, plus a proper entry in **Programs and Features**.
 
 ### License
 
@@ -107,7 +128,7 @@ SleepSwitch — для всех, кому нужно, чтобы Mac продо�
 
 ```bash
 go install fyne.io/tools/cmd/fyne@latest
-fyne package -os darwin -name SleepSwitch --appID com.luciferdennica.sleepswitch -src ./cmd/sleepswitch
+fyne package -os darwin -name SleepSwitch --appID com.luciferdennica.sleepswitch -icon assets/icon.png -src ./cmd/sleepswitch
 ```
 
 Universal binary (Apple Silicon + Intel):
@@ -117,6 +138,27 @@ CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 CC="clang -arch arm64"   go build -o buil
 CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 CC="clang -arch x86_64"  go build -o build/ss-amd64 ./cmd/sleepswitch
 lipo -create -output build/SleepSwitch.app/Contents/MacOS/sleepswitch build/ss-arm64 build/ss-amd64
 ```
+
+### Windows
+
+На Windows SleepSwitch живёт в системном трее. Правый клик по иконке → **Запретить сон / Разрешить сон**, либо «Показать окно» для статуса. Кнопка вызывает `powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION` для AC и DC — это ровно то же, что **Панель управления → Электропитание → Действие при закрытии крышки**. В этом релизе Windows показывает UAC на каждое переключение; беспарольный режим через Task Scheduler — в планах.
+
+Сборка на Windows:
+
+```cmd
+go install fyne.io/tools/cmd/fyne@latest
+fyne package -os windows -name SleepSwitch -appID com.luciferdennica.sleepswitch ^
+  -icon assets\icon.png -src .\cmd\sleepswitch -release
+move SleepSwitch.exe build\
+```
+
+Затем установщик через Inno Setup 6:
+
+```cmd
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SleepSwitch.iss
+```
+
+В `build\` появится `SleepSwitch-1.0.2-Setup.exe` с мастером Welcome → Лицензия → Папка → Опции (ярлык на рабочем столе, автозапуск при входе) → Установка → Готово, и нормальной записью в **Программы и компоненты**.
 
 ### Лицензия
 
