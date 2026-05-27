@@ -32,9 +32,9 @@ In short: anyone who has ever cursed at a Mac for sleeping at the worst possible
 
 ### Install
 
-1. Download `SleepSwitch.app` from the [Releases](https://github.com/lutikk/SleepSwitch/releases) page (universal binary — runs on Apple Silicon and Intel).
-2. Move it to `/Applications`.
-3. First launch: right-click → **Open** (Gatekeeper warning, since the app is not Apple-signed).
+1. Download `SleepSwitch-1.0.0.dmg` from the [Releases](https://github.com/lutikk/SleepSwitch/releases) page (universal binary — runs on Apple Silicon and Intel).
+2. Open the DMG and drag **SleepSwitch** to the **Applications** folder.
+3. First launch: right-click `SleepSwitch.app` in `/Applications` → **Open** (Gatekeeper warning, since the app is not Apple-signed).
 4. Click the toggle. Enter your admin password when macOS asks.
 
 ### Build From Source
@@ -90,9 +90,9 @@ SleepSwitch — для всех, кому нужно, чтобы Mac продо�
 
 ### Установка
 
-1. Скачай `SleepSwitch.app` со страницы [Releases](https://github.com/lutikk/SleepSwitch/releases) (universal binary — работает и на Apple Silicon, и на Intel).
-2. Перетащи в `/Applications`.
-3. Первый запуск: правый клик → **Открыть** (Gatekeeper ругается, потому что приложение не подписано Apple).
+1. Скачай `SleepSwitch-1.0.0.dmg` со страницы [Releases](https://github.com/lutikk/SleepSwitch/releases) (universal binary — работает и на Apple Silicon, и на Intel).
+2. Открой DMG и перетащи **SleepSwitch** в папку **Applications**.
+3. Первый запуск: правый клик по `SleepSwitch.app` в `/Applications` → **Открыть** (Gatekeeper ругается, потому что приложение не подписано Apple).
 4. Нажми кнопку. Введи пароль администратора, когда macOS попросит.
 
 ### Сборка Из Исходников
