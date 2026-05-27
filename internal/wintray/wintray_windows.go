@@ -4,7 +4,6 @@
 package wintray
 
 import (
-	_ "embed"
 	"fmt"
 	"image/color"
 	"time"
@@ -18,6 +17,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 
+	"github.com/lutikk/SleepSwitch/assets"
 	"github.com/lutikk/SleepSwitch/internal/winpower"
 )
 
@@ -26,10 +26,7 @@ const (
 	appID    = "com.luciferdennica.sleepswitch"
 )
 
-//go:embed Icon.png
-var iconBytes []byte
-
-var trayIcon = fyne.NewStaticResource("Icon.png", iconBytes)
+var trayIcon = fyne.NewStaticResource("icon.png", assets.Icon)
 
 // Run boots the Fyne app, installs the system tray menu and a hidden status
 // window. Blocks until the user picks Quit.
