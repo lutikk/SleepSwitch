@@ -6,3 +6,6 @@ import _ "embed"
 
 //go:embed icon.png
 var Icon []byte
+
+//go:embed tray_icon.png
+var TrayIcon []byte

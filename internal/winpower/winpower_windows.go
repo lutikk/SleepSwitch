@@ -12,7 +12,18 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 )
+
+// CREATE_NO_WINDOW prevents the child console process from flashing a window
+// when the parent is a GUI app (Fyne builds with -H windowsgui).
+const createNoWindow = 0x08000000
+
+func hiddenCmd(name string, args ...string) *exec.Cmd {
+	cmd := exec.Command(name, args...)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, CreationFlags: createNoWindow}
+	return cmd
+}
 
 type State int
 
@@ -31,7 +42,7 @@ const (
 var lidIndexRe = regexp.MustCompile(`(?i)Current\s+(AC|DC)\s+Power\s+Setting\s+Index:\s*0x([0-9a-f]+)`)
 
 func Current() (State, error) {
-	out, err := exec.Command("powercfg", "/q", "SCHEME_CURRENT", subButtons, lidAction).CombinedOutput()
+	out, err := hiddenCmd("powercfg", "/q", "SCHEME_CURRENT", subButtons, lidAction).CombinedOutput()
 	if err != nil {
 		return Unknown, fmt.Errorf("%w: %s", err, strings.TrimSpace(string(out)))
 	}
@@ -77,7 +88,7 @@ func Set(prevent bool) error {
 		"Start-Process -FilePath powershell.exe -ArgumentList '-NoProfile','-Command','%s' -Verb runAs -WindowStyle Hidden -Wait",
 		strings.ReplaceAll(cmdLine, "'", "''"),
 	)
-	cmd := exec.Command("powershell.exe", "-NoProfile", "-Command", ps)
+	cmd := hiddenCmd("powershell.exe", "-NoProfile", "-Command", ps)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {

@@ -26,16 +26,21 @@ const (
 	appID    = "com.luciferdennica.sleepswitch"
 )
 
-var trayIcon = fyne.NewStaticResource("icon.png", assets.Icon)
+var (
+	windowIcon = fyne.NewStaticResource("icon.png", assets.Icon)
+	// Trays on Windows 11 render best from a small square icon — feeding the
+	// full 1024x1024 master can silently fail to register the systray entry.
+	trayIcon = fyne.NewStaticResource("tray_icon.png", assets.TrayIcon)
+)
 
 // Run boots the Fyne app, installs the system tray menu and a hidden status
 // window. Blocks until the user picks Quit.
 func Run(version string) {
 	a := app.NewWithID(appID)
-	a.SetIcon(trayIcon)
+	a.SetIcon(windowIcon)
 
 	w := a.NewWindow(appTitle)
-	w.SetIcon(trayIcon)
+	w.SetIcon(windowIcon)
 	w.Resize(fyne.NewSize(320, 220))
 	w.SetFixedSize(true)
 	w.CenterOnScreen()
@@ -45,6 +50,11 @@ func Run(version string) {
 	t.buildWindow()
 	t.installTray()
 	t.refresh()
+
+	// Always show the window on launch so the user has a visible UI even if
+	// the systray icon fails to register (some Win11 builds throttle tray
+	// registration). Closing the window hides it back into the tray.
+	w.Show()
 
 	a.Run()
 }
