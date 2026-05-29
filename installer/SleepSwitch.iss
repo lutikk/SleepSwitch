@@ -12,7 +12,7 @@
 ;      Resulting installer lands in ..\build\SleepSwitch-<version>-Setup.exe.
 
 #define MyAppName       "SleepSwitch"
-#define MyAppVersion    "1.0.4"
+#define MyAppVersion    "1.0.5"
 #define MyAppPublisher  "lutikk"
 #define MyAppURL        "https://github.com/lutikk/SleepSwitch"
 #define MyAppExeName    "SleepSwitch.exe"

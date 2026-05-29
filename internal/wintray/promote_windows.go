@@ -23,8 +23,10 @@ import (
 const notifyIconSettingsPath = `Control Panel\NotifyIconSettings`
 
 // promoteTrayIcon runs in a goroutine after the app has had a chance to
-// register its tray icon. Polls until our entry shows up (or times out),
-// then writes IsPromoted=1 and broadcasts a settings change.
+// register its tray icon. Polls until our entry shows up, writes
+// IsPromoted=1 and broadcasts WM_SETTINGCHANGE several times — Win11
+// Explorer is inconsistent about when it re-reads the tray settings, so we
+// repeat the nudge across the first ~90 seconds of uptime.
 func promoteTrayIcon() {
 	log := applog.L()
 	exePath, err := os.Executable()
@@ -34,16 +36,35 @@ func promoteTrayIcon() {
 	}
 	log.Printf("promoteTrayIcon: searching for %s", exePath)
 
-	deadline := time.Now().Add(20 * time.Second)
-	for time.Now().Before(deadline) {
-		if updated := tryUpdatePromoted(exePath); updated {
+	// Phase 1: wait for the NotifyIconSettings entry to appear, then write
+	// IsPromoted=1 the first time we see it.
+	pollDeadline := time.Now().Add(60 * time.Second)
+	promoted := false
+	for !promoted && time.Now().Before(pollDeadline) {
+		if tryUpdatePromoted(exePath) {
 			log.Printf("promoteTrayIcon: IsPromoted=1 written, broadcasting")
 			broadcastSettingChange()
-			return
+			promoted = true
+			break
 		}
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(1 * time.Second)
 	}
-	log.Printf("promoteTrayIcon: timed out — entry not found in HKCU\\%s", notifyIconSettingsPath)
+	if !promoted {
+		log.Printf("promoteTrayIcon: timed out — entry not found in HKCU\\%s", notifyIconSettingsPath)
+		return
+	}
+
+	// Phase 2: keep re-asserting IsPromoted=1 and broadcasting every 10s for
+	// the next minute. Some Win11 builds reset our flag back to 0 the first
+	// time Explorer re-renders the tray; others ignore our broadcast until
+	// they happen to repaint, so we give Explorer many opportunities.
+	for i := 0; i < 6; i++ {
+		time.Sleep(10 * time.Second)
+		if tryUpdatePromoted(exePath) {
+			broadcastSettingChange()
+		}
+	}
+	log.Printf("promoteTrayIcon: phase 2 done")
 }
 
 func tryUpdatePromoted(targetExe string) bool {
