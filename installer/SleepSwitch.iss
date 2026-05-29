@@ -12,7 +12,7 @@
 ;      Resulting installer lands in ..\build\SleepSwitch-<version>-Setup.exe.
 
 #define MyAppName       "SleepSwitch"
-#define MyAppVersion    "1.0.3"
+#define MyAppVersion    "1.0.4"
 #define MyAppPublisher  "lutikk"
 #define MyAppURL        "https://github.com/lutikk/SleepSwitch"
 #define MyAppExeName    "SleepSwitch.exe"
@@ -48,6 +48,11 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 MinVersion=10.0
 DisableProgramGroupPage=yes
+; In-app updater calls the installer with /VERYSILENT /CLOSEAPPLICATIONS
+; /RESTARTAPPLICATIONS — these flags need CloseApplications=yes so Setup
+; closes the running SleepSwitch.exe before overwriting it.
+CloseApplications=yes
+RestartApplications=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

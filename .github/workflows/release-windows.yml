@@ -9,7 +9,7 @@ on:
       tag:
         description: 'Existing tag to attach Windows artifacts to (e.g. v1.0.2)'
         required: true
-        default: 'v1.0.3'
+        default: 'v1.0.4'
 
 jobs:
   build:
@@ -55,11 +55,10 @@ jobs:
         shell: cmd
         run: '"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SleepSwitch.iss'
 
-      - name: Attach artifacts to release
+      - name: Attach installer to release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.target.outputs.tag }}
           files: |
             build/SleepSwitch-*-Setup.exe
-            build/SleepSwitch.exe
           fail_on_unmatched_files: true
